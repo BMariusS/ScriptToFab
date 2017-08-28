@@ -55,7 +55,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER, REMOTE_IP):
 				raise SystemExit()
 			time.sleep(3)
 			
-			secureCopyMedia = run("scp %s -rv `ls | grep '"'media'"' ` root@%s" % (SSHOPTIONS, REMOTE_IP))
+			secureCopyMedia = local("scp %s -rv `ls | grep '"'media'"' ` root@%s" % (SSHOPTIONS, REMOTE_IP))
 			if secureCopyMedia.return_code == 0:
 				run("echo 'Copied media with success'")
 			else:
