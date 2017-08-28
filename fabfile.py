@@ -1,16 +1,15 @@
+#IMPORTS
 from fabric.api import *
 import time
 
 #VARIABLES
 
-env.hosts=["localhost"]
-env.user="marius"
-env.password="rootTest"
-
 SSHOPTIONS="-o ConnectTimeout=900 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=10"
 TESTDEPLOYCYCLE=False
 logFile = "/tmp/logFile.txt"
 
+
+#FUNCTIONS
 def deploy_tests(LOCAL_REQUIRED_FOLDER, REMOTE_IP):
 	mountTry = 0
 	with settings(warn_only=True):
