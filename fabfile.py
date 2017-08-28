@@ -2,13 +2,7 @@ from fabric.api import *
 
 
 #VARIABLES
-env.hosts=["localhost"]
-env.user="marius"
-env.password="rootTest"
 
-#SSH_USERNAME=root
-#LOCAL_REQUIRED_FOLDER=$1
-#REMOTE_IP=$2
 SSHOPTIONS="-o ConnectTimeout=900 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=10"
 TESTDEPLOYCYCLE=False
 
