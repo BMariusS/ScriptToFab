@@ -10,7 +10,7 @@ env.password="rootTest"
 #LOCAL_REQUIRED_FOLDER=$1
 #REMOTE_IP=$2
 SSHOPTIONS="-o ConnectTimeout=900 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=10"
-#TESTDEPLOYCYCLE=True
+TESTDEPLOYCYCLE=False
 
 def deploy_tests(LOCAL_REQUIRED_FOLDER):
 	mountTry = 0
@@ -80,4 +80,22 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 
 
 def call_all(LOCAL_REQUIRED_FOLDER):
-	run("echo '"'Deploy tests on target: %s'"'" % REMOTE_IP)
+	with settings(warn_only=True):
+		mountedSSD = run("[[ `mount | grep ssd | wc -l` -ge 1 ]] && echo SSD mounted || echo SSD not mounted! ; exit 1")
+		if mountedSSD.return_code == 0:
+			run("echo 'SSD mounted'")
+		else:
+			run("echo 'Error at ssd mounting'")
+			raise SystemExit()
+		while(TESTDEPLOYCYCLE == False):
+			tests = deploy_tests(LOCAL_REQUIRED_FOLDER)
+			if tests.return_code == 0:
+				TESTDEPLOYCYCLE = True
+	run("echo 'Deploying tests & validation configurations to target!'")
+	run("sync")
+	run("sleep 5")
+	run("echo 'Done'")
+				
+
+
+
