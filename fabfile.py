@@ -1,5 +1,5 @@
 from fabric.api import *
-
+import time
 
 #VARIABLES
 
@@ -35,6 +35,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 			run("echo 'Failed to make file system'")
 			raise SystemExit()
 		run("sync")
+		local("sync")
 
 
 		with cd("%s/validation/target" % LOCAL_REQUIRED_FOLDER):
@@ -44,7 +45,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 			else:
 				run("echo 'Failed to copy'")
 				raise SystemExit()
-			run("sleep 5")
+			time.sleep(5)
 			
 			runScript = run("bash /opt/scripts/scriptAutoEnv.sh")
 			if runScript.return_code == 0:
@@ -52,7 +53,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 			else:
 				run("echo 'Failed to run the script'")
 				raise SystemExit()
-			run("sleep 3")
+			time.sleep(3)
 			
 			secureCopyMedia = run("scp %s -rv `ls | grep '"'media'"' `" % SSHOPTIONS)
 			if secureCopyMedia.return_code == 0:
@@ -60,7 +61,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 			else:
 				run("echo 'Failed to copy media'")
 				raise SystemExit()
-			run("sleep 5")
+			time.sleep(5)
 			
 			scriptRun = run("bash /opt/scripts/scriptAutoEnv.sh")
 			if scriptRun.return_code == 0:
@@ -69,6 +70,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 				run("echo 'Failed to run the script the second time'")
 				raise SystemExit()
 		run("sync")
+		local("sync")
 
 			
 
@@ -87,7 +89,8 @@ def call_all(LOCAL_REQUIRED_FOLDER):
 				TESTDEPLOYCYCLE = True
 	run("echo 'Deploying tests & validation configurations to target!'")
 	run("sync")
-	run("sleep 5")
+	local("sync")
+	time.sleep(5)
 	run("echo 'Done'")
 				
 
