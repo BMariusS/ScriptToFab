@@ -6,7 +6,7 @@ import time
 SSHOPTIONS="-o ConnectTimeout=900 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=10"
 TESTDEPLOYCYCLE=False
 
-def deploy_tests(LOCAL_REQUIRED_FOLDER):
+def deploy_tests(LOCAL_REQUIRED_FOLDER, REMOTE_IP):
 	mountTry = 0
 	with settings(warn_only=True):
 		while (mountTry<2):
@@ -39,7 +39,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 
 
 		with cd("%s/validation/target" % LOCAL_REQUIRED_FOLDER):
-			secureCopy = run("scp %s -rv `ls | grep '"'opt'"' `" % SSHOPTIONS)
+			secureCopy = local("scp %s -rv `ls | grep '"'opt'"' ` root@%s" % (SSHOPTIONS, REMOTE_IP))
 			if secureCopy.return_code == 0:
 				run("echo 'Copied with success'")
 			else:
@@ -55,7 +55,7 @@ def deploy_tests(LOCAL_REQUIRED_FOLDER):
 				raise SystemExit()
 			time.sleep(3)
 			
-			secureCopyMedia = run("scp %s -rv `ls | grep '"'media'"' `" % SSHOPTIONS)
+			secureCopyMedia = run("scp %s -rv `ls | grep '"'media'"' ` root@%s" % (SSHOPTIONS, REMOTE_IP))
 			if secureCopyMedia.return_code == 0:
 				run("echo 'Copied media with success'")
 			else:
